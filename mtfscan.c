@@ -4,36 +4,14 @@
 #include <errno.h>
 #include <stdio.h>
 
-#if defined(__APPLE__)
-#define __APPLE_API_OBSOLETE
-#include "apple-mtio.h"
-#else
-#include <sys/mtio.h>
-#endif
-
 #include "mtf.h"
 
 int mtfscan_init(struct mtf_stream *s, int fd)
 {
-	struct mtget mg;
-
 	s->fd = fd;
 	s->abspos = 0;
 
-	if (ioctl(fd, MTIOCGET, &mg) == -1) {
-		if (errno == ENOTTY) {
-			s->blksize = 0; /* no blocks */
-			errno = 0;
-		} else {
-			return 0;
-		}
-	} else {
-#ifdef MT_ST_BLKSIZE_MASK
-		s->blksize = (mg.mt_dsreg & MT_ST_BLKSIZE_MASK) >> MT_ST_BLKSIZE_SHIFT;
-#else
-		s->blksize = mg.mt_blksiz;
-#endif
-	}
+	s->blksize = 0; /* left over from old tape stuff */
 
 	s->ready = 0;
 	s->flbsize = s->flbread = 0;

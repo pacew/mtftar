@@ -1,14 +1,11 @@
 #ifndef __mtf_h
 #define __mtf_h
 
+#define _FILE_OFFSET_BITS 64
+
 /* for off_t */
 #include <sys/types.h>
 #include <unistd.h>
-
-#ifdef __APPLE__
-#define off64_t off_t
-#define lseek64 lseek
-#endif
 
 /* for time_t */
 #include <time.h>
@@ -24,14 +21,14 @@ struct mtf_stream {
 	unsigned int flbread;
 	unsigned int flbsize;
 	unsigned int stream;
-	off64_t streamdid;
+	off_t streamdid;
 	int laststream;
 
 	int fd;
 	int stringtype;
 	unsigned int ready;
 
-	off64_t abspos;
+	off_t abspos;
 };
 
 /* for memcmp() */

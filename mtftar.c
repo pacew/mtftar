@@ -78,7 +78,7 @@ int main(int argc, char *argv[])
 	int c, fd, setno, listonly, listindex;
 	int outfd, verbose;
 	int patching;
-	off64_t idxpos;
+	off_t idxpos;
 
 
 	char *volume = 0;
@@ -191,7 +191,7 @@ int main(int argc, char *argv[])
 			fputs("-l and -X are mutually exclusive\n", stderr);
 			exit(1);
 		}
-		if (lseek64(fd, idxpos, SEEK_SET) != idxpos) {
+		if (lseek(fd, idxpos, SEEK_SET) != idxpos) {
 			perror("lseek");
 			exit(1);
 		}
@@ -242,6 +242,8 @@ int main(int argc, char *argv[])
 	}
 
 	for (;;) {
+		(void)skipping_set; /* make ref to avoid compiler warning */
+
 		if (!mtfscan_start(&s)) {
 			/* could be an eof */
 			break;
